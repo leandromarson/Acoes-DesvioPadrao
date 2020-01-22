@@ -1,0 +1,221 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+struct{//struct do usuario
+	char nome[50];
+	char cpf[11];
+	
+	struct{//struct das acoes
+	char nomecomp[50];
+	char areaatua[50];
+	float valornovo;
+	float valor;
+	double variacao;
+	
+	}acoes[4];
+}usuario[4];
+
+struct{//struct para fazer o desvio padrao
+	float xi[4];
+	
+	}xz[4];
+	struct{//struct para fazer o desvio padrao
+		float yi[4];
+
+	}yz[4];
+
+void main() {
+	int x,y,n=9;//numero de acoes total;
+	int op;//case
+	float valor;//comparador
+	float soma=0,somafinal=0,media,dp;//media e somas e desvio padrao
+	printf("Açoes da bolsa e usuarios");
+	do{
+		system("cls");//limpar tela
+		printf("\nMenu de Opcoes");
+		printf("\n1 - Cadastrar usuario e acoes");
+		printf("\n2 - Visualizar ");
+		printf("\n3 - Valores de acoes");
+		printf("\n4 - Media e desvio padrao das acoes");
+		printf("\n5 - Alterar Valores das acoes");
+		printf("\n6 - Sair");
+		printf("\nDigite sua opcao: ");
+		scanf("%d",&op);
+		switch(op){
+			case 1:
+
+				for(x=1;x<4;x++){
+			 
+					printf("\nUsuario: %d\n",x);
+					printf("Insira o nome do usuario\n");
+					scanf("%s",usuario[x].nome);
+
+					printf("Insira o cpf do usuario\n");
+					scanf("%s",usuario[x].cpf);
+
+					printf("Cadastro de acoes\n");
+
+					for(y=1;y<4;y++){
+						
+						printf("\nAcao: %d\n",y);
+
+						printf("Insira o nome da compania\n");
+						scanf("%s",usuario[x].acoes[y].nomecomp);
+
+						printf("Insira a area de atuacao da compania\n");
+						scanf("%s",usuario[x].acoes[y].areaatua);
+
+						printf("Insira o valor da acao\n");
+						scanf("%f",&usuario[x].acoes[y].valor);
+
+					}
+			}
+			break;
+			
+		case 2:
+			for(x=1;x<4;x++){
+
+				printf("\nUsuario: %d\n",x);
+
+				printf("nome do usuario: %s\n",usuario[x].nome);
+
+				printf("cpf do usuario: %s\n",usuario[x].cpf);
+
+
+				for(y=1;y<4;y++){
+
+					printf("\nAcao: %d\n",y);
+
+					printf("nome da compania: %s\n",usuario[x].acoes[y].nomecomp);
+
+					printf("area de atuacao da compania: %s\n",usuario[x].acoes[y].areaatua);
+
+					printf("valor da acao: %0.2f\n",usuario[x].acoes[y].valor);
+
+					getch();
+
+
+				}
+			}
+
+			break;
+			
+		case 3:
+
+			printf("Digite um valor!!\n");
+			scanf("%f",&valor);
+
+			for(x=1;x<4;x++){
+				for(y=1;y<4;y++){
+
+					if(valor>usuario[x].acoes[y].valor){//comparador
+
+						printf("nome da compania: %s\n",usuario[x].acoes[y].nomecomp);
+
+						printf("area de atuacao da compania: %s\n",usuario[x].acoes[y].areaatua);
+
+						printf("valor da acao: %0.2f\n",usuario[x].acoes[y].valor);
+
+						getch();
+					}
+
+				}
+			}
+
+			break;
+		
+		case 4:// media e desvio padrao
+
+			for(x=1;x<4;x++){
+
+				for(y=1;y<4;y++){
+
+					soma+=usuario[x].acoes[y].valor;
+
+				}
+
+			}
+			
+			media=soma/n;
+
+			printf("Media:%0.2f\n",media);
+
+			for(x=1;x<4;x++){
+
+				for(y=1;y<4;y++){
+
+					yz[x].yi[y]=usuario[x].acoes[y].valor-media;			 
+
+					xz[x].xi[y]=pow((yz[x].yi[y]),2);
+
+					somafinal+=xz[x].xi[y];
+				}
+
+			}
+
+			dp=somafinal/(n-1);//desvio padrao
+
+			dp=sqrt(dp);
+
+			printf("Desvio Padrao:%0.2f\n",dp);
+
+			getch();
+			break;
+
+		case 5:
+
+			for(x=1;x<4;x++){
+
+				printf("Usuario %d\n",x);
+
+				for(y=1;y<4;y++){
+
+					printf("Acao %d\n",y);
+
+					printf("Digite um novo valor\n");
+					scanf("%f",&usuario[x].acoes[y].valornovo);
+					printf("Valor antigo:%0.2f\nValor novo:%0.2f\n",usuario[x].acoes[y].valor,usuario[x].acoes[y].valornovo);
+
+					if(usuario[x].acoes[y].valornovo>usuario[x].acoes[y].valor){
+						
+						usuario[x].acoes[y].variacao=((usuario[x].acoes[y].valornovo-usuario[x].acoes[y].valor)/usuario[x].acoes[y].valor)*100;//calculo de variacao
+
+						printf("Ouve um aumento na variacao de %0.2lf %\n",usuario[x].acoes[y].variacao);
+
+					}
+					else if(usuario[x].acoes[y].valornovo<usuario[x].acoes[y].valor){
+						
+						usuario[x].acoes[y].variacao=((usuario[x].acoes[y].valor-usuario[x].acoes[y].valornovo)/usuario[x].acoes[y].valornovo)*100;
+
+						printf("Ouve uma reduçao na variacao de %0.2lf %\n",usuario[x].acoes[y].variacao);
+
+					}else{
+
+						usuario[x].acoes[y].variacao=0;
+
+						printf("Variacao %0.2lf %\n",usuario[x].acoes[y].variacao);
+					}
+
+				}
+
+			}
+
+			getch();
+
+			break;
+
+		case 6:
+
+			break;
+		
+		default:
+			printf("\nOpcao invalida");
+			break;
+		}
+		
+	}while(op!=6);
+	
+	system("pause");
+}
